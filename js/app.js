@@ -133,4 +133,24 @@ function calculateData() {
   document.getElementsByClassName(
     "info__numbers--total"
   )[0].innerHTML = `$${monthlyTotal.toFixed(2)}`;
+
+  updateChart(myChart, labels, backgroundColor);
 }
+
+function updateChart(chart, label, color) {
+  chart.data.datasets.pop();
+  chart.data.datasets.push({
+    label: label,
+    backgroundColor: color,
+    data: [
+      monthlyPrincipalInterest,
+      monthlyPropertyTaxes,
+      monthlyHomeInsurance,
+      monthlyHOA,
+    ],
+  });
+  chart.options.transitions.active.animation.duration = 0;
+  chart.update();
+}
+
+calculateData();
