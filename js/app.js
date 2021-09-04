@@ -25,6 +25,7 @@ let totalLoan,
   monthlyPropertyTaxes,
   monthlyHomeInsurance,
   monthlyHOA,
+  monthlyTotal,
   labels = ["Principal & Interest", "Property Tax", "Home Insurance", "HOA"],
   backgroundColor = [
     "rgba(255,99,132,1)",
@@ -87,6 +88,35 @@ function updateInputsState(event) {
     ...state,
     [name]: value,
   };
+  calculateData();
 }
 
-console.log(state);
+document.getElementsByTagName("form")[0].addEventListener("submit", (event) => {
+  event.preventDefault();
+  document
+    .getElementsByClassName("mg-page__right")[0]
+    .classList.add("mg-page__right--animate");
+  calculateData();
+});
+
+function calculateData() {
+  totalLoan = state.price - state.price * (state.down_payment / 100);
+  totalMonths = state.loan_years * 12;
+  monthlyInterest = state.interest_rate / 100 / 12;
+  monthlyPrincipalInterest = (
+    totalLoan *
+    ((monthlyInterest * (1 + monthlyInterest) ** totalMonths) /
+      ((1 + monthlyInterest) ** totalMonths - 1))
+  ).toFixed(2);
+  monthlyPropertyTaxes = (
+    (state.price * (state.property_tax / 100)) /
+    12
+  ).toFixed(2);
+  monthlyHomeInsurance = state.home_insurance / 12;
+  monthlyHOA = state.hoa / 12;
+  monthlyTotal =
+    parseFloat(monthlyPrincipalInterest) +
+    parseFloat(monthlyPropertyTaxes) +
+    parseFloat(monthlyHomeInsurance) +
+    parseFloat(monthlyHOA);
+}
