@@ -1,21 +1,11 @@
 let state = {
   price: getNumber(document.querySelectorAll('[name="price"]')[0].value),
-  loan_years: getNumber(
-    document.querySelectorAll('[name="loan_years"]')[0].value
-  ),
-  down_payment: getNumber(
-    document.querySelectorAll('[name="down_payment"]')[0].value
-  ),
-  interest_rate: getNumber(
-    document.querySelectorAll('[name="interest_rate"]')[0].value
-  ),
-  property_tax: getNumber(
-    document.querySelectorAll('[name="property_tax"]')[0].value
-  ),
-  home_insurance: getNumber(
-    document.querySelectorAll('[name="home_insurance"]')[0].value
-  ),
-  hoa: getNumber(document.querySelectorAll('[name="hoa"]')[0].value),
+  loan_years: document.querySelectorAll('[name="loan_years"]')[0].value,
+  down_payment: document.querySelectorAll('[name="down_payment"]')[0].value,
+  interest_rate: document.querySelectorAll('[name="interest_rate"]')[0].value,
+  property_tax: document.querySelectorAll('[name="property_tax"]')[0].value,
+  home_insurance: document.querySelectorAll('[name="home_insurance"]')[0].value,
+  hoa: document.querySelectorAll('[name="hoa"]')[0].value,
 };
 
 let totalLoan,
@@ -78,11 +68,21 @@ for (i = 0; i < inputTexts.length; i++) {
   inputTexts[i].addEventListener("input", updateInputsState);
 }
 
+let inputSlides = document.getElementsByClassName("form-group__range-slide");
+for (i = 0; i < inputSlides.length; i++) {
+  inputSlides[i].addEventListener("input", updateInputsState);
+}
 function updateInputsState(event) {
   let name = event.target.name;
   let value = event.target.value;
   if (name == "price") {
     value = getNumber(value);
+  }
+
+  if (event.target.type === "range") {
+    let total = (document.getElementsByClassName(
+      `total__${name}`
+    )[0].innerHTML = value);
   }
   state = {
     ...state,
